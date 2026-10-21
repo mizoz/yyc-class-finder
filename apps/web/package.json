@@ -1,5 +1,5 @@
 {
-  "name": "@city-picks/admin",
+  "name": "yyc-class-finder-web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,7 +10,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@city-picks/shared": "*",
     "next": "^14.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0"

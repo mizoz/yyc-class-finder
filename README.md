@@ -1,71 +1,72 @@
 # YYC Class Finder
 
-YYC Class Finder helps Calgarians find active City of Calgary recreation programs without digging through a giant open-data table. It filters city-run classes by age, budget, day, and activity, then links back to the official dataset for verification.
+A small web app that helps Calgarians find upcoming City of Calgary recreation programs without scrolling through a large open-data table.
 
-The problem: Calgary has useful public recreation data, but it is easier to browse as a parent, student, or adult learner when the first screen asks practical questions.
+**Live site:** https://city-picks.vercel.app
 
-## Live Data
+## Why
 
-The web app calls the City of Calgary Open Data Socrata API:
+The City of Calgary publishes its recreation program listings as open data, but the raw dataset is hard to browse. YYC Class Finder starts with the practical questions a parent, student or adult learner would ask (how old, how much, which day, what kind of activity) and returns a short list of matching classes, each linked back to the official source.
+
+## Features
+
+- Filter active programs by age, maximum price, day of the week and keyword
+- Searches course names, program sections and venue names
+- Shows dates, times, price, age range, venue and a short description for each class
+- Only returns classes dated today or later (Calgary time)
+- Save classes to a short list in the browser
+- Links back to the official City of Calgary dataset for verification
+- Server-side API route with 15-minute caching, so the city API is not hit on every search
+- No API key or account needed
+
+## How it works
+
+The Next.js route `apps/web/app/api/programs/route.ts` queries the City of Calgary Socrata API:
 
 - Dataset: Recreation Program Listings
 - Endpoint: `https://data.calgary.ca/resource/q9hh-gfbx.json`
-- Source page: `https://data.calgary.ca/Recreation-and-Culture/Recreation-Program-Listings/q9hh-gfbx`
+- Source page: https://data.calgary.ca/Recreation-and-Culture/Recreation-Program-Listings/q9hh-gfbx
 
-The Next.js route at `apps/admin/app/api/programs/route.ts` queries active programs and applies filters using Socrata `$where`, `$order`, and `$limit` parameters. Responses are cached for 15 minutes with Next.js revalidation.
+Filters are translated into SoQL `$where`, `$order` and `$limit` parameters (user input is escaped), and the response is trimmed to the fields the interface needs.
 
-## Repository Structure
+Program data belongs to the City of Calgary and is used under its open-data licence. Always confirm details and register through the City's official channels.
 
-```txt
-apps/admin        Public Next.js web app
-apps/mobile       Earlier Expo shell, not part of the Vercel deployment
-packages/shared   Shared TypeScript types and constants
-supabase           Earlier database schema and seed notes
-docs               Product and data notes
-```
+## Quick start
 
-## Development
-
-Prerequisites:
-
-- Node.js 20+
-- npm 10+
-
-Install dependencies:
+Requirements: Node.js 20+ and npm 10+.
 
 ```bash
 npm install
+npm run dev        # http://localhost:3000
 ```
 
-Run the web app:
+Other scripts:
 
 ```bash
-npm run dev:admin
+npm run build      # production build
+npm run start      # serve the production build
+npm run typecheck  # TypeScript checks
 ```
 
-Build the Vercel app:
+## Project structure
 
-```bash
-npm run build
+```txt
+apps/web     Next.js app (UI and the /api/programs route)
+vercel.json  Vercel build settings
 ```
 
-Run TypeScript checks:
+## Deployment
 
-```bash
-npm run typecheck
-```
+`vercel.json` builds the app from the repository root and serves `apps/web/.next`. No environment variables are required.
 
-## Vercel
+## Tech stack
 
-The root `vercel.json` builds the Next.js app from `apps/admin`:
+- Next.js 14 (App Router) and React 18
+- TypeScript
+- Plain CSS
+- City of Calgary Open Data (Socrata API)
+- Vercel
 
-```json
-{
-  "installCommand": "npm install",
-  "buildCommand": "npm run build",
-  "outputDirectory": "apps/admin/.next",
-  "framework": "nextjs"
-}
-```
+## License
 
-No API key is required for the City of Calgary open-data endpoint used by this app.
+MIT. See [LICENSE](LICENSE).

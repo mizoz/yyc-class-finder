@@ -210,7 +210,7 @@ export default function ClassFinder() {
         <nav aria-label="Page sections">
           <a href="#search">Search</a>
           <a href="#results">Results</a>
-          <a href="https://github.com/mizoz/city-picks" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://github.com/mizoz/yyc-class-finder" target="_blank" rel="noreferrer">GitHub</a>
         </nav>
       </header>
 
